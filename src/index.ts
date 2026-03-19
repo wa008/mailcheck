@@ -19,7 +19,7 @@ app.get('/', (c) => {
 
 app.get('/api', (c) => {
   return c.json({
-    name: "Email Verification API (Cloudflare Worker)",
+    name: "MailCheck API (Cloudflare Worker)",
     version: "1.2.0",
     levels: "L1-L6 (Syntax, DNS, MX, Disposable, Role, Free Provider)",
     endpoints: {

@@ -4,7 +4,7 @@ export const getFrontendHtml = () => `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EmailVerify - Dashboard</title>
+    <title>MailCheck - Email Verification Service</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #6366f1; --bg: #0f172a; --card-bg: rgba(30, 41, 59, 0.7); --text: #f8fafc; --text-muted: #94a3b8; }
@@ -24,7 +24,7 @@ export const getFrontendHtml = () => `
 </head>
 <body>
     <div class="container">
-        <h1>EmailVerify</h1>
+        <h1>MailCheck</h1>
         <div class="card">
             <div class="input-row">
                 <input type="text" id="email" placeholder="email@example.com" onkeydown="if(event.key==='Enter')verify()">
