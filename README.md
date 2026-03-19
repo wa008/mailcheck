@@ -1,32 +1,32 @@
-# Email Check API - Documentation (文档)
+# MailCheck API - Documentation
 
-This is a multi-level email verification service (多层级邮件验证服务) running on Cloudflare Workers.
-
----
-
-## 1. Features (功能)
-
-This API provides 6 levels of validation (6个级别的校验):
-1.  **Syntax (语法)**: Standard email format check (标准邮件格式检查).
-2.  **DNS (域名解析)**: Check if the domain has A/AAAA records (域名解析记录检查).
-3.  **MX (邮件服务器)**: Check for Mail Server records (邮件服务器记录检查).
-4.  **Disposable (临时邮箱)**: Detect throwaway email services (自动检测临时/一次性邮箱).
-5.  **Role-based (角色前缀)**: Find emails like `admin@`, `support@` (识别类似 admin/support 的角色账号).
-6.  **Free Provider (免费邮箱)**: Flag Gmail, Yahoo, etc (标记免费邮箱服务商).
+This is a multi-level email verification service running on Cloudflare Workers.
 
 ---
 
-## 2. API Endpoints (接口地址)
+## 1. Features
 
-### Single Email Check (单次验证)
+This API provides 6 levels of validation:
+1.  **Syntax**: Standard email format check.
+2.  **DNS**: Check if the domain has A/AAAA records.
+3.  **MX**: Check for Mail Server records.
+4.  **Disposable**: Detect throwaway email services.
+5.  **Role-based**: Find emails like `admin@`, `support@`.
+6.  **Free Provider**: Flag Gmail, Yahoo, etc.
+
+---
+
+## 2. API Endpoints
+
+### Single Email Check
 **GET `/verify?email=[address]`**
 
-**Request (请求):**
+**Request:**
 ```bash
-curl "https://email-verify.yourname.workers.dev/verify?email=test@gmail.com"
+curl "https://mailcheck.bensontech.dev/verify?email=test@gmail.com"
 ```
 
-**Response (响应):**
+**Response:**
 ```json
 {
   "email": "test@gmail.com",
@@ -44,33 +44,33 @@ curl "https://email-verify.yourname.workers.dev/verify?email=test@gmail.com"
 }
 ```
 
-### Batch Email Check (批量验证)
+### Batch Email Check
 **POST `/verify/batch`**
 
-**Request (请求):**
+**Request:**
 ```bash
 curl -X POST -H "Content-Type: application/json" \
   -d '{"emails": ["test@gmail.com", "admin@google.com"]}' \
-  "https://email-verify.yourname.workers.dev/verify/batch"
+  "https://mailcheck.bensontech.dev/verify/batch"
 ```
 
 ---
 
-## 3. Scoring (评分机制)
-- **100**: Perfect business email (完美的企业邮箱).
-- **80-99**: Highly deliverable (高送达率).
-- **60-79**: Common/Free provider (常见/免费邮箱).
-- **<60**: Potentially problematic (可能存在问题).
-- **0-40**: Invalid or high-risk (无效或高风险).
+## 3. Scoring
+- **100**: Perfect business email.
+- **80-99**: Highly deliverable.
+- **60-79**: Common/Free provider.
+- **<60**: Potentially problematic.
+- **0-40**: Invalid or high-risk.
 
 ---
 
-## 4. Local Development (本地开发)
+## 4. Local Development
 
 ```bash
-# Start local server (启动本地测试)
+# Start local server
 npm run dev
 
-# Run local tests (本地测试)
+# Run local tests
 npx wrangler dev
 ```
