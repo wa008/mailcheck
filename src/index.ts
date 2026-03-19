@@ -1,7 +1,9 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { html } from 'hono/html';
 import { verifyEmail } from './validators/index';
 import { rateLimit } from './middleware/rate-limit';
+import { getFrontendHtml } from './frontend';
 
 const app = new Hono();
 
@@ -12,9 +14,13 @@ app.use('*', rateLimit());
 // --- Routes ---
 
 app.get('/', (c) => {
+  return c.html(getFrontendHtml());
+});
+
+app.get('/api', (c) => {
   return c.json({
     name: "Email Verification API (Cloudflare Worker)",
-    version: "1.0.0",
+    version: "1.2.0",
     levels: "L1-L6 (Syntax, DNS, MX, Disposable, Role, Free Provider)",
     endpoints: {
       single: "GET /verify?email=user@example.com",
@@ -48,9 +54,10 @@ app.post('/verify/batch', async (c) => {
       return c.json({ error: "Invalid input. Expected { emails: string[] }" }, 400);
     }
 
-    // Limit batch size to protect CPU limits on free plan (10ms CPU total)
-    if (emails.length > 50) {
-      return c.json({ error: "Batch size exceeds limit (max 50 emails)" }, 400);
+    // Limit batch size to 15 to stay within Cloudflare Free subrequest limits (50 total)
+    // 15 emails * 3 DNS queries = 45 subrequests.
+    if (emails.length > 15) {
+      return c.json({ error: "Batch size exceeds limit (max 15 emails for Free Plan)" }, 400);
     }
 
     const results = await Promise.all(emails.map(email => verifyEmail(email)));
